@@ -1,0 +1,38 @@
+@font-face {
+  font-family: 'GRIFTER-Regular';
+  src: url('/fonts/GRIFTER-Regular.woff2') format('woff2'),
+       url('/fonts/GRIFTER-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GRIFTER-Bold';
+  src: url('/fonts/GRIFTER-Bold.woff2') format('woff2'),
+       url('/fonts/GRIFTER-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ═══ TABLET (≤1023px) ═══ */
+@media (max-width: 1023px) {
+  .grid-4-col { grid-template-columns: 1fr 1fr !important; }
+  .grid-3-col { grid-template-columns: 1fr !important; }
+  .insights-3-col { grid-template-columns: 1fr !important; }
+  .insights-featured { min-height: 40vh !important; }
+  .audience-row { grid-template-columns: 1fr !important; gap: 4px !important; }
+  .solution-detail-grid { grid-template-columns: 1fr !important; }
+  .cta-form-container { width: 90vw !important; }
+  .footer-brand { font-size: 8vw !important; }
+}
+
+/* ═══ MOBILE (≤640px) ═══ */
+@media (max-width: 640px) {
+  .grid-4-col { grid-template-columns: 1fr !important; }
+  .cta-form-container { width: 95vw !important; }
+  .cta-form-2col { grid-template-columns: 1fr !important; }
+  .footer-brand { font-size: 12vw !important; }
+  .cta-contact-links { flex-direction: column !important; gap: 20px !important; }
+}
