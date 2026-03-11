@@ -519,16 +519,17 @@ function InsightsSection() {
           </div>
         </div>
 
-        <div className="insights-3-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1 }}>
+        <div className="insights-3-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1, alignItems: "stretch" }}>
           {[
-            { title: "No Friction", desc: "No QR codes. No wristbands. No check-ins.\nJust show up and keep doing your thing — biq handles the rest in the background." },
-            { title: "Tamper-Proof", desc: "Impossible to fake. Built to be trusted.\nPresence data verified through Bluetooth mesh — no spoofs, no workarounds, no bad data." },
-            { title: "Privacy First", desc: "No GPS. No tracking. No identity exposed.\nZK-proven and cryptographically anonymized — your presence is verified, never your location." },
+            { title: "No Friction", subtitle: "No QR codes. No wristbands. No check-ins.", desc: "Just show up and keep doing your thing — biq handles the rest in the background." },
+            { title: "Tamper-Proof", subtitle: "Impossible to fake. Built to be trusted.", desc: "Presence data verified through Bluetooth mesh — no spoofs, no workarounds, no bad data." },
+            { title: "Privacy First", subtitle: "No GPS. No tracking. No identity exposed.", desc: "ZK-proven and cryptographically anonymized — your presence is verified, never your location." },
           ].map((item, i) => (
             <FadeIn key={i} delay={i * 0.1}>
-              <div style={{ background: GRAY, padding: "clamp(3rem, 6vw, 8rem) clamp(1.5rem, 2.5vw, 2rem) clamp(1.5rem, 2.5vw, 2rem)", display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
-                <h4 style={{ fontSize: "clamp(1.25rem, 2.1vw, 1.95rem)", fontWeight: 600, color: DARK, lineHeight: 1.25, marginBottom: 12, fontFamily: DISPLAY }}>{item.title}</h4>
-                <p style={{ fontFamily: MONO, fontSize: 10, textTransform: "uppercase" as const, letterSpacing: "0.03em", color: "rgba(32,32,32,0.45)", lineHeight: 1.6, whiteSpace: "pre-line" }}>{item.desc}</p>
+              <div style={{ background: GRAY, padding: "clamp(3rem, 6vw, 8rem) clamp(1.5rem, 2.5vw, 2rem) clamp(3rem, 6vw, 6rem)", display: "flex", flexDirection: "column", justifyContent: "flex-start", height: "100%" }}>
+                <h4 style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)", fontWeight: 600, color: DARK, lineHeight: 1.15, marginBottom: "clamp(0.8rem, 1.5vw, 1.2rem)", fontFamily: DISPLAY }}>{item.title}</h4>
+                <p style={{ fontFamily: DISPLAY, fontSize: "clamp(1rem, 1.8vw, 1.4rem)", fontWeight: 500, color: "rgba(32,32,32,0.6)", lineHeight: 1.4, marginBottom: "clamp(1rem, 2vw, 1.5rem)" }}>{item.subtitle}</p>
+                <p style={{ fontFamily: MONO, fontSize: 10, textTransform: "uppercase" as const, letterSpacing: "0.03em", color: "rgba(32,32,32,0.35)", lineHeight: 1.6 }}>{item.desc}</p>
               </div>
             </FadeIn>
           ))}
