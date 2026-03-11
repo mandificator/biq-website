@@ -352,6 +352,7 @@ function Nav({ menuOpen, setMenuOpen, light = false, logoVisible = true }: { men
               </div>
               <div>
                 <a href="#audience" onClick={close} style={{ fontSize: "clamp(2.25rem, 4.5vw, 3rem)", fontWeight: 600, color: DARK, textDecoration: "none", display: "block", marginBottom: 32 }}>Built for</a>
+                <a href="#download" onClick={close} style={{ fontSize: "clamp(2.25rem, 4.5vw, 3rem)", fontWeight: 600, color: DARK, textDecoration: "none", display: "block", marginBottom: 32 }}>Download</a>
                 <a href="#cta" onClick={close} style={{ fontSize: "clamp(2.25rem, 4.5vw, 3rem)", fontWeight: 600, color: DARK, textDecoration: "none", display: "block" }}>Contact</a>
               </div>
             </div>
