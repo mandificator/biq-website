@@ -601,11 +601,13 @@ function SolutionDetail({ solution, onClose }: { solution: typeof solutions[numb
     const onScroll = () => {
       const maxScroll = el.scrollHeight - el.clientHeight;
       if (maxScroll <= 0) return;
-      const p = Math.max(0, Math.min(1, el.scrollTop / maxScroll));
-      setProgress(p);
-      if (p >= 0.98 && !completedRef.current) {
+      const raw = Math.max(0, Math.min(1, el.scrollTop / maxScroll));
+      // Text fills in first 75% of scroll, last 25% is buffer
+      const textProgress = Math.min(1, raw / 0.75);
+      setProgress(textProgress);
+      if (raw >= 0.98 && !completedRef.current) {
         completedRef.current = true;
-        setTimeout(() => onClose(), 800);
+        setTimeout(() => onClose(), 400);
       }
     };
     el.addEventListener("scroll", onScroll);
@@ -919,7 +921,7 @@ function SidebarLink({ href, label, value, external }: { href: string; label: st
       style={{
         display: "flex", flexDirection: "column", justifyContent: "center", textDecoration: "none",
         color: GRAY, background: hovered ? "#2a2a2a" : DARK,
-        padding: "clamp(1.5rem, 2.5vw, 2rem) clamp(1.2rem, 2vw, 2rem)", flex: "1 1 0",
+        padding: "clamp(1.5rem, 2.5vw, 2rem) clamp(1.2rem, 2vw, 2rem)", flex: 1, width: "100%",
         transition: "background 0.3s ease",
       }}
     >
@@ -947,17 +949,39 @@ function CtaSection() {
 
   const isMobile = useIsMobile();
 
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sidebarRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setSidebarVisible(true); obs.disconnect(); } }, { threshold: 0.2 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   const contactLinks = (
-    <div style={{ display: "flex", flexDirection: "column", gap: 1, height: "100%" }}>
+    <div ref={sidebarRef} style={{ display: "flex", flexDirection: "column", gap: 1, height: "100%" }}>
       {[
         { href: "https://biq-protocol.gitbook.io/biq/", label: "Gitbook", value: "Docs", external: true },
         { href: "https://github.com/biqProtocol", label: "GitHub", value: "biqProtocol", external: true },
         { href: "https://x.com/biqProtocol", label: "X Official Account", value: "@biqProtocol", external: true },
         { href: "https://t.me/r0b0sapiens", label: "Telegram", value: "@r0b0sapiens", external: true },
-      ].map((c, i) => (
-        <SidebarLink key={i} {...c} />
+      ].map((c, i, arr) => (
+        <motion.div key={i} style={{ flex: "1 1 0", display: "flex" }}
+          initial={{ y: 60, opacity: 0 }}
+          animate={sidebarVisible ? { y: 0, opacity: 1 } : {}}
+          transition={{ duration: 0.5, ease: EASE, delay: (arr.length - i) * 0.12 }}
+        >
+          <SidebarLink {...c} />
+        </motion.div>
       ))}
-      <div style={{ flex: "0 0 30%", display: "flex", alignItems: "center", justifyContent: "center", background: DARK }}>
+      <motion.div
+        initial={{ y: 60, opacity: 0 }}
+        animate={sidebarVisible ? { y: 0, opacity: 1 } : {}}
+        transition={{ duration: 0.5, ease: EASE, delay: 0 }}
+        style={{ flex: "0 0 30%", display: "flex", alignItems: "center", justifyContent: "center", background: DARK }}
+      >
         <style>{`@keyframes logoFlip { 0% { transform: rotate(0deg); } 74.1% { transform: rotate(0deg); } 81.5% { transform: rotate(180deg); } 92.6% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }`}</style>
         <div style={{
           width: "clamp(120px, 16vw, 200px)", height: "clamp(130px, 17.2vw, 216px)",
@@ -969,7 +993,7 @@ function CtaSection() {
           maskImage: "url(/logo_biq.svg)", maskRepeat: "no-repeat",
           maskPosition: "center", maskSize: "contain",
         } as React.CSSProperties} />
-      </div>
+      </motion.div>
     </div>
   );
 
