@@ -305,15 +305,15 @@ function useNavTheme(scrollContainer?: React.RefObject<HTMLElement | null>) {
   return light;
 }
 
-function Nav({ menuOpen, setMenuOpen, light = false }: { menuOpen: boolean; setMenuOpen: (v: boolean) => void; light?: boolean }) {
+function Nav({ menuOpen, setMenuOpen, light = false, logoVisible = true }: { menuOpen: boolean; setMenuOpen: (v: boolean) => void; light?: boolean; logoVisible?: boolean }) {
   const close = useCallback(() => setMenuOpen(false), [setMenuOpen]);
   const color = menuOpen ? DARK : light ? GRAY : DARK;
   const borderColor = menuOpen ? "none" : `1px solid ${color}`;
 
   return (
     <>
-      <a href="/" style={{ position: "fixed", top: 20, left: 20, zIndex: 60, display: "flex", alignItems: "center", textDecoration: "none" }}>
-        <img src="/logo_biq_64.png" alt="biq" style={{ height: 38, width: 38 }} />
+      <a href="/" style={{ position: "fixed", top: 20, left: 20, zIndex: 60, display: "flex", alignItems: "center", textDecoration: "none", opacity: logoVisible ? 1 : 0, transition: "opacity 0.4s ease", pointerEvents: logoVisible ? "auto" : "none" }}>
+        <img src="/logo_biq_64.png" alt="biq" style={{ height: 76, width: 76 }} />
       </a>
       <nav style={{ position: "fixed", top: 0, right: 0, zIndex: 50, padding: "0 clamp(1.5rem, 3vw, 3rem)", height: 72, display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
         <button onClick={() => setMenuOpen(!menuOpen)} style={{
@@ -1393,6 +1393,7 @@ export function Solutions() {
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
   const [forgetMeOpen, setForgetMeOpen] = useState(false);
+  const [logoVisible, setLogoVisible] = useState(true);
   const isMobile = useIsMobile();
   const pageRef = useRef<HTMLDivElement>(null);
   const sideRef = useRef<HTMLDivElement>(null);
@@ -1402,6 +1403,15 @@ export function Solutions() {
   useEffect(() => {
     document.body.style.margin = "0";
   }, []);
+
+  // Hide logo when CTA section is in view
+  useEffect(() => {
+    const ctaEl = document.getElementById("cta");
+    if (!ctaEl) return;
+    const obs = new IntersectionObserver(([e]) => setLogoVisible(!e.isIntersecting), { threshold: 0.1 });
+    obs.observe(ctaEl);
+    return () => obs.disconnect();
+  }, [isMobile]);
 
   // Sync sidebar scroll (desktop only)
   useEffect(() => {
@@ -1433,7 +1443,7 @@ export function Solutions() {
   if (isMobile) {
     return (
       <div style={{ background: CORAL, fontFamily: DISPLAY, WebkitFontSmoothing: "antialiased", MozOsxFontSmoothing: "grayscale" } as React.CSSProperties}>
-        <Nav menuOpen={menuOpen} setMenuOpen={setMenuOpen} light={navLight} />
+        <Nav menuOpen={menuOpen} setMenuOpen={setMenuOpen} light={navLight} logoVisible={logoVisible} />
         <HeroMain />
         <InsightsSection />
         <SolutionsSection />
@@ -1458,7 +1468,7 @@ export function Solutions() {
         scrollbarWidth: "none", fontFamily: DISPLAY,
         WebkitFontSmoothing: "antialiased", MozOsxFontSmoothing: "grayscale",
       } as React.CSSProperties}>
-        <Nav menuOpen={menuOpen} setMenuOpen={setMenuOpen} light={navLight} />
+        <Nav menuOpen={menuOpen} setMenuOpen={setMenuOpen} light={navLight} logoVisible={logoVisible} />
         <div ref={splitRef} style={{ display: "flex", background: "linear-gradient(180deg, #f7a027, #d946ef, #00c6ff)", gap: 1 }}>
           <div style={{ width: "75%", flexShrink: 0 }}>
             <HeroMain />
