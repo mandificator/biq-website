@@ -905,11 +905,29 @@ function DownloadSection() {
    ═══════════════════════════════════════════ */
 
 const INPUT_STYLE: React.CSSProperties = {
-  background: GRAY, border: "none", outline: "none", borderRadius: 6,
+  background: WHITE, border: "none", outline: "none", borderRadius: 6,
   padding: "14px 16px", fontSize: 11, fontFamily: MONO,
   textTransform: "uppercase", letterSpacing: "0.06em", color: DARK,
   width: "100%",
 };
+
+function SidebarLink({ href, label, value, external }: { href: string; label: string; value: string; external?: boolean }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <a href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined}
+      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{
+        display: "flex", flexDirection: "column", justifyContent: "center", textDecoration: "none",
+        color: GRAY, background: hovered ? "#2a2a2a" : DARK,
+        padding: "clamp(1.5rem, 2.5vw, 2rem) clamp(1.2rem, 2vw, 2rem)", flex: "1 1 0",
+        transition: "background 0.3s ease",
+      }}
+    >
+      <div style={{ fontFamily: MONO, fontSize: 16, textTransform: "uppercase" as const, letterSpacing: "0.06em", color: hovered ? "rgba(229,229,229,0.7)" : "rgba(229,229,229,0.4)", marginBottom: 8, transition: "color 0.3s ease" }}>{label}</div>
+      <span style={{ fontSize: "clamp(1.2rem, 2.5vw, 2rem)", fontWeight: 600, fontFamily: DISPLAY, lineHeight: 1.1, color: hovered ? WHITE : GRAY, transition: "color 0.3s ease" }}>{value}</span>
+    </a>
+  );
+}
 
 function CtaSection() {
   const [email, setEmail] = useState("");
@@ -927,41 +945,163 @@ function CtaSection() {
   };
   const updateField = (field: string, value: string) => setFormData(prev => ({ ...prev, [field]: value }));
 
+  const isMobile = useIsMobile();
+
+  const contactLinks = (
+    <div style={{ display: "flex", flexDirection: "column", gap: 1, height: "100%" }}>
+      {[
+        { href: "https://biq-protocol.gitbook.io/biq/", label: "Gitbook", value: "Docs", external: true },
+        { href: "https://github.com/biqProtocol", label: "GitHub", value: "biqProtocol", external: true },
+        { href: "https://x.com/biqProtocol", label: "X Official Account", value: "@biqProtocol", external: true },
+        { href: "https://t.me/r0b0sapiens", label: "Telegram", value: "@r0b0sapiens", external: true },
+      ].map((c, i) => (
+        <SidebarLink key={i} {...c} />
+      ))}
+      <div style={{ flex: "0 0 30%", display: "flex", alignItems: "center", justifyContent: "center", background: DARK }}>
+        <style>{`@keyframes logoFlip { 0% { transform: rotate(0deg); } 74.1% { transform: rotate(0deg); } 81.5% { transform: rotate(180deg); } 92.6% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }`}</style>
+        <div style={{
+          width: "clamp(120px, 16vw, 200px)", height: "clamp(130px, 17.2vw, 216px)",
+          background: "linear-gradient(135deg, #f7a027 0%, #e8593f 15%, #d946ef 30%, #9b59b6 45%, #00c6ff 60%, #2ecc71 75%, #f7a027 90%)",
+          backgroundSize: "200% 200%",
+          animation: "logoFlip 2.7s ease-in-out infinite, gradientShift 18s ease infinite",
+          WebkitMaskImage: "url(/logo_biq.svg)", WebkitMaskRepeat: "no-repeat",
+          WebkitMaskPosition: "center", WebkitMaskSize: "contain",
+          maskImage: "url(/logo_biq.svg)", maskRepeat: "no-repeat",
+          maskPosition: "center", maskSize: "contain",
+        } as React.CSSProperties} />
+      </div>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <section id="cta" data-nav-theme="light" onClick={() => showForm && setShowForm(false)}>
+        <div style={{
+          background: GRAY, minHeight: "70vh", display: "flex", flexDirection: "column",
+          justifyContent: "center",
+          padding: "clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vh, 5rem)",
+        }}>
+          <FadeIn>
+            <div style={{
+              fontSize: "clamp(2.5rem, 12vw, 21rem)",
+              fontWeight: 700, lineHeight: 0.85, letterSpacing: "0.02em",
+              color: DARK, fontFamily: DISPLAY,
+            }}>
+              Let's talk presence.
+            </div>
+          </FadeIn>
+          <AnimatePresence mode="wait">
+            {!showForm ? (
+              <motion.div key="email" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}>
+                <FadeIn delay={0.15}>
+                  <form onSubmit={handleEmailSubmit} style={{ marginTop: "clamp(2rem, 5vh, 4rem)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "clamp(1.5rem, 4vw, 3.4rem)", color: DARK, fontWeight: 300, fontFamily: DISPLAY }}>
+                      <span>(</span>
+                      <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Enter your email" required aria-label="Email address"
+                        style={{ background: "none", border: "none", outline: "none", fontSize: "clamp(0.9rem, 2.4vw, 1.8rem)", fontFamily: DISPLAY, fontWeight: 400, color: DARK, flex: 1, borderBottom: `1px solid rgba(32,32,32,0.25)`, paddingBottom: 4 }}
+                      />
+                      <span>)</span>
+                    </div>
+                    <div style={{ marginTop: 28 }}>
+                      <button type="submit" style={{
+                        fontFamily: MONO, fontSize: 10, textTransform: "uppercase" as const,
+                        letterSpacing: "0.08em", color: DARK,
+                        border: `1px solid ${DARK}`, borderRadius: 20, padding: "9px 24px",
+                        background: "none", cursor: "pointer", transition: "all 0.3s",
+                      }}
+                        onMouseEnter={e => { (e.target as HTMLElement).style.background = DARK; (e.target as HTMLElement).style.color = GRAY; }}
+                        onMouseLeave={e => { (e.target as HTMLElement).style.background = "none"; (e.target as HTMLElement).style.color = DARK; }}
+                      >Continue</button>
+                    </div>
+                  </form>
+                </FadeIn>
+              </motion.div>
+            ) : (
+              <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: EASE }}
+                onClick={e => e.stopPropagation()}
+                className="cta-form-container"
+                style={{ marginTop: "clamp(2rem, 4vh, 3rem)", background: "rgba(32,32,32,0.06)", borderRadius: 12, padding: "clamp(1.5rem, 3vw, 3rem)" }}
+              >
+                <h3 style={{ fontSize: "clamp(1.2rem, 2.5vw, 2rem)", fontWeight: 500, color: DARK, fontFamily: DISPLAY, marginBottom: "clamp(1rem, 2vw, 2.5rem)", textAlign: "center" }}>
+                  Just a few more questions.
+                </h3>
+                {formSubmitted ? (
+                  <p style={{ textAlign: "center", color: DARK, fontFamily: DISPLAY, fontSize: 24, padding: "3rem 0" }}>Sent! We'll be in touch.</p>
+                ) : (
+                  <form onSubmit={handleFormSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div className="cta-form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <input style={INPUT_STYLE} placeholder="FIRST NAME" value={formData.firstName} onChange={e => updateField("firstName", e.target.value)} required />
+                      <input style={INPUT_STYLE} placeholder="LAST NAME" value={formData.lastName} onChange={e => updateField("lastName", e.target.value)} required />
+                    </div>
+                    <div className="cta-form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <input style={INPUT_STYLE} placeholder="COMPANY / AGENCY" value={formData.company} onChange={e => updateField("company", e.target.value)} />
+                      <input style={INPUT_STYLE} placeholder="JOB TITLE" value={formData.jobTitle} onChange={e => updateField("jobTitle", e.target.value)} />
+                    </div>
+                    <select style={{ ...INPUT_STYLE, appearance: "auto" as any }} value={formData.subject} onChange={e => updateField("subject", e.target.value)}>
+                      <option>General Inquiry</option><option>Partnership</option><option>Integration</option><option>Investment</option><option>Press</option>
+                    </select>
+                    <textarea style={{ ...INPUT_STYLE, minHeight: 120, resize: "vertical" as const }} placeholder="OPTIONAL MESSAGE" value={formData.message} onChange={e => updateField("message", e.target.value)} />
+                    <button type="submit" style={{
+                      background: DARK, color: GRAY, border: "none", borderRadius: 30,
+                      padding: "14px 0", fontSize: 11, fontFamily: MONO,
+                      textTransform: "uppercase" as const, letterSpacing: "0.08em",
+                      cursor: "pointer", width: "100%", marginTop: 8, transition: "all 0.3s",
+                    }}
+                      onMouseEnter={e => { (e.target as HTMLElement).style.background = "#000"; }}
+                      onMouseLeave={e => { (e.target as HTMLElement).style.background = DARK; }}
+                    >Submit</button>
+                  </form>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+        {contactLinks}
+      </section>
+    );
+  }
+
   return (
-    <section id="cta" data-nav-theme="light" onClick={() => showForm && setShowForm(false)} style={{
-      background: DARK, minHeight: "100vh", display: "flex", flexDirection: "column",
-      justifyContent: "center", alignItems: "center",
-      padding: "clamp(3rem, 8vw, 10rem) clamp(1rem, 3vw, 3rem)",
-      borderTop: `1px solid ${GRAY}`,
+    <section id="cta" data-nav-theme="dark" onClick={() => showForm && setShowForm(false)} style={{
+      display: "flex", minHeight: "100vh", gap: 1, background: "linear-gradient(180deg, #f7a027, #d946ef, #00c6ff)",
     }}>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%" }}>
+      {/* Left 75% — big text + form */}
+      <div style={{
+        width: "75%", background: GRAY, display: "flex", flexDirection: "column",
+        justifyContent: "center",
+        padding: "clamp(6rem, 12vh, 10rem) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vh, 5rem)",
+      }}>
         <FadeIn>
-          <h2 style={{ fontSize: "clamp(1.8rem, 6.75vw, 5.25rem)", fontWeight: 600, color: GRAY, textAlign: "center", lineHeight: 1.1, fontFamily: DISPLAY, letterSpacing: "-0.03em" }}>
+          <div style={{
+            fontSize: "clamp(2.5rem, 12vw, 21rem)",
+            fontWeight: 700, lineHeight: 0.85, letterSpacing: "0.02em",
+            color: DARK, fontFamily: DISPLAY,
+          }}>
             Let's talk presence.
-          </h2>
+          </div>
         </FadeIn>
 
         <AnimatePresence mode="wait">
           {!showForm ? (
             <motion.div key="email" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}>
               <FadeIn delay={0.15}>
-                <form onSubmit={handleEmailSubmit} style={{ marginTop: "clamp(2rem, 5vh, 4rem)", textAlign: "center" }}>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "clamp(1.5rem, 4vw, 3.4rem)", color: GRAY, fontWeight: 300, fontFamily: DISPLAY }}>
+                <form onSubmit={handleEmailSubmit} style={{ marginTop: "clamp(2rem, 5vh, 4rem)" }}>
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "clamp(1.5rem, 4vw, 3.4rem)", color: DARK, fontWeight: 300, fontFamily: DISPLAY }}>
                     <span>(</span>
                     <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Enter your email" required aria-label="Email address"
-                      style={{ background: "none", border: "none", outline: "none", fontSize: "clamp(0.9rem, 2.4vw, 1.8rem)", fontFamily: DISPLAY, fontWeight: 400, color: GRAY, width: "clamp(140px, 50vw, 300px)", textAlign: "center", borderBottom: `1px solid rgba(229,229,229,0.3)`, paddingBottom: 4 }}
+                      style={{ background: "none", border: "none", outline: "none", fontSize: "clamp(0.9rem, 2.4vw, 1.8rem)", fontFamily: DISPLAY, fontWeight: 400, color: DARK, width: "clamp(140px, 50vw, 300px)", borderBottom: `1px solid rgba(32,32,32,0.25)`, paddingBottom: 4 }}
                     />
                     <span>)</span>
                   </div>
                   <div style={{ marginTop: 28 }}>
                     <button type="submit" style={{
                       fontFamily: MONO, fontSize: 10, textTransform: "uppercase" as const,
-                      letterSpacing: "0.08em", color: GRAY,
-                      border: `1px solid ${GRAY}`, borderRadius: 20, padding: "9px 24px",
+                      letterSpacing: "0.08em", color: DARK,
+                      border: `1px solid ${DARK}`, borderRadius: 20, padding: "9px 24px",
                       background: "none", cursor: "pointer", transition: "all 0.3s",
                     }}
-                      onMouseEnter={e => { (e.target as HTMLElement).style.background = GRAY; (e.target as HTMLElement).style.color = DARK; }}
-                      onMouseLeave={e => { (e.target as HTMLElement).style.background = "none"; (e.target as HTMLElement).style.color = GRAY; }}
+                      onMouseEnter={e => { (e.target as HTMLElement).style.background = DARK; (e.target as HTMLElement).style.color = GRAY; }}
+                      onMouseLeave={e => { (e.target as HTMLElement).style.background = "none"; (e.target as HTMLElement).style.color = DARK; }}
                     >Continue</button>
                   </div>
                 </form>
@@ -971,13 +1111,13 @@ function CtaSection() {
             <motion.div key="form" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.5, ease: EASE }}
               onClick={e => e.stopPropagation()}
               className="cta-form-container"
-              style={{ marginTop: "clamp(2rem, 4vh, 3rem)", width: "min(50vw, 90%)", background: "rgba(229,229,229,0.08)", borderRadius: 12, padding: "clamp(1.5rem, 3vw, 3rem)" }}
+              style={{ marginTop: "clamp(2rem, 4vh, 3rem)", width: "min(50vw, 90%)", background: "rgba(32,32,32,0.06)", borderRadius: 12, padding: "clamp(1.5rem, 3vw, 3rem)" }}
             >
-              <h3 style={{ fontSize: "clamp(1.2rem, 2.5vw, 2rem)", fontWeight: 500, color: GRAY, fontFamily: DISPLAY, marginBottom: "clamp(1rem, 2vw, 2.5rem)", textAlign: "center" }}>
-                Perfect. Just a few more questions so we can route your inquiry.
+              <h3 style={{ fontSize: "clamp(1.2rem, 2.5vw, 2rem)", fontWeight: 500, color: DARK, fontFamily: DISPLAY, marginBottom: "clamp(1rem, 2vw, 2.5rem)", textAlign: "center" }}>
+                Just a few more questions.
               </h3>
               {formSubmitted ? (
-                <p style={{ textAlign: "center", color: GRAY, fontFamily: DISPLAY, fontSize: 24, padding: "3rem 0" }}>Sent! We'll be in touch.</p>
+                <p style={{ textAlign: "center", color: DARK, fontFamily: DISPLAY, fontSize: 24, padding: "3rem 0" }}>Sent! We'll be in touch.</p>
               ) : (
                 <form onSubmit={handleFormSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   <div className="cta-form-2col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -993,13 +1133,13 @@ function CtaSection() {
                   </select>
                   <textarea style={{ ...INPUT_STYLE, minHeight: 120, resize: "vertical" as const }} placeholder="OPTIONAL MESSAGE" value={formData.message} onChange={e => updateField("message", e.target.value)} />
                   <button type="submit" style={{
-                    background: GRAY, color: DARK, border: "none", borderRadius: 30,
+                    background: DARK, color: GRAY, border: "none", borderRadius: 30,
                     padding: "14px 0", fontSize: 11, fontFamily: MONO,
                     textTransform: "uppercase" as const, letterSpacing: "0.08em",
                     cursor: "pointer", width: "100%", marginTop: 8, transition: "all 0.3s",
                   }}
-                    onMouseEnter={e => { (e.target as HTMLElement).style.background = WHITE; }}
-                    onMouseLeave={e => { (e.target as HTMLElement).style.background = GRAY; }}
+                    onMouseEnter={e => { (e.target as HTMLElement).style.background = "#000"; }}
+                    onMouseLeave={e => { (e.target as HTMLElement).style.background = DARK; }}
                   >Submit</button>
                 </form>
               )}
@@ -1008,25 +1148,9 @@ function CtaSection() {
         </AnimatePresence>
       </div>
 
-      <div className="cta-contact-links" style={{ marginTop: "auto", paddingTop: "clamp(2rem, 4vw, 6rem)", width: "100%", borderTop: `1px solid rgba(229,229,229,0.15)`, display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "clamp(16px, 3vw, 40px)" }}>
-        <a href="mailto:connect@biq.me" style={{ display: "flex", alignItems: "center", gap: 16, textDecoration: "none", color: GRAY }}>
-          <div>
-            <div style={{ fontFamily: MONO, fontSize: 9, textTransform: "uppercase" as const, letterSpacing: "0.06em", color: "rgba(229,229,229,0.5)", marginBottom: 4 }}>Email</div>
-            <span style={{ fontSize: "clamp(14px, 2.5vw, 24px)", fontWeight: 500, fontFamily: DISPLAY }}>connect@biq.me</span>
-          </div>
-        </a>
-        <a href="https://x.com/biqProtocol" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 16, textDecoration: "none", color: GRAY }}>
-          <div>
-            <div style={{ fontFamily: MONO, fontSize: 9, textTransform: "uppercase" as const, letterSpacing: "0.06em", color: "rgba(229,229,229,0.5)", marginBottom: 4 }}>X Official Account</div>
-            <span style={{ fontSize: "clamp(14px, 2.5vw, 24px)", fontWeight: 500, fontFamily: DISPLAY }}>@biqProtocol</span>
-          </div>
-        </a>
-        <a href="https://t.me/r0b0sapiens" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 16, textDecoration: "none", color: GRAY }}>
-          <div>
-            <div style={{ fontFamily: MONO, fontSize: 9, textTransform: "uppercase" as const, letterSpacing: "0.06em", color: "rgba(229,229,229,0.5)", marginBottom: 4 }}>CEO Telegram</div>
-            <span style={{ fontSize: "clamp(14px, 2.5vw, 24px)", fontWeight: 500, fontFamily: DISPLAY }}>@r0b0sapiens</span>
-          </div>
-        </a>
+      {/* Right 25% — contact sidebar */}
+      <div style={{ width: "25%", display: "flex", flexDirection: "column" }}>
+        {contactLinks}
       </div>
     </section>
   );
@@ -1039,20 +1163,6 @@ function CtaSection() {
 function Footer({ onPrivacy, onTerms, onForgetMe }: { onPrivacy?: () => void; onTerms?: () => void; onForgetMe?: () => void }) {
   return (
     <footer style={{ background: CORAL, paddingBottom: 20, borderTop: `1px solid ${GRAY}` }} role="contentinfo">
-      <div style={{ lineHeight: 1.1, paddingTop: 30, textAlign: "center", overflow: "visible" }}>
-        <div className="footer-brand" style={{
-          fontSize: "clamp(2rem, 11.5vw, 20rem)",
-          fontWeight: 800, fontFamily: DISPLAY,
-          letterSpacing: "0.05em", userSelect: "none",
-          background: "linear-gradient(90deg, #f7a027, #d946ef, #00c6ff)",
-          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-          backgroundClip: "text", color: "transparent",
-          display: "inline-block",
-        } as React.CSSProperties}>
-          BIQ PROTOCOL
-        </div>
-      </div>
-
       {/* Legal */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "space-between", padding: "12px clamp(1rem, 3vw, 3rem) 0", fontFamily: MONO, fontSize: 9, textTransform: "uppercase" as const, letterSpacing: "0.06em", color: DARK }}>
         <span>© 2026 biq protocol</span>
