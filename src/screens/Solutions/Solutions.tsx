@@ -507,7 +507,7 @@ function InsightsSection() {
       ))}
 
       <div style={{ position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "1fr", gap: 1 }}>
-        <div className="insights-featured" style={{ background: `linear-gradient(135deg, #666 0%, #999 100%)`, minHeight: "50vh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "clamp(1.5rem, 4vw, 3rem)", position: "relative" }}>
+        <div className="insights-featured" style={{ background: `url(/photo.png) center/cover no-repeat`, minHeight: "50vh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "clamp(1.5rem, 4vw, 3rem)", position: "relative" }}>
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5))" }} />
           <div style={{ position: "relative" }}>
             <h3 style={{ fontSize: "clamp(1.5rem, 3.3vw, 3rem)", fontWeight: 600, color: WHITE, lineHeight: 1.2, marginBottom: 16, fontFamily: DISPLAY }}>
