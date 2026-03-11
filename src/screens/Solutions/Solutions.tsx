@@ -340,8 +340,9 @@ function Nav({ menuOpen, setMenuOpen, light = false }: { menuOpen: boolean; setM
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.4, ease: EASE }}
-            style={{ position: "fixed", inset: 0, zIndex: 46, background: "linear-gradient(180deg, #f7a027, #d946ef, #00c6ff)", padding: "clamp(6rem, 12vh, 10rem) clamp(2rem, 5vw, 5rem)", overflow: "auto", pointerEvents: "auto" }}
+            style={{ position: "fixed", inset: 0, zIndex: 46, background: "linear-gradient(135deg, #f7a027 0%, #e8593f 15%, #d946ef 30%, #9b59b6 45%, #00c6ff 60%, #2ecc71 75%, #f7a027 90%)", backgroundSize: "200% 200%", animation: "gradientShift 18s ease infinite", padding: "clamp(6rem, 12vh, 10rem) clamp(2rem, 5vw, 5rem)", overflow: "auto", pointerEvents: "auto" }}
           >
+            <style>{`@keyframes gradientShift { 0% { background-position: 0% 50%; } 25% { background-position: 50% 100%; } 50% { background-position: 100% 50%; } 75% { background-position: 50% 0%; } 100% { background-position: 0% 50%; } }`}</style>
             <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "3rem" }}>
               <div>
                 <span style={{ fontSize: "clamp(2.25rem, 4.5vw, 3rem)", fontWeight: 600, color: DARK, display: "block", marginBottom: 20 }}>Solutions</span>
@@ -804,13 +805,15 @@ function StoreBadge({ href, label, icon, size = "hero" }: { href: string; label:
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
         display: "inline-flex", alignItems: "center",
-        gap: isHero ? "clamp(16px, 3vw, 28px)" : "clamp(10px, 1.5vw, 14px)",
-        background: hovered ? "rgba(32,32,32,0.12)" : "transparent",
-        border: `2px solid rgba(32,32,32,${hovered ? 0.6 : 0.35})`,
+        gap: isHero ? "clamp(14px, 2vw, 22px)" : "clamp(10px, 1.5vw, 14px)",
+        background: hovered ? "rgba(32,32,32,0.08)" : "transparent",
+        border: `1px solid rgba(32,32,32,${hovered ? 0.5 : 0.25})`,
         borderRadius: 0,
         padding: isHero
-          ? "clamp(24px, 5vw, 44px) clamp(36px, 8vw, 72px)"
+          ? "clamp(16px, 3vw, 28px) 0"
           : "clamp(12px, 2vw, 18px) clamp(20px, 3vw, 32px)",
+        width: isHero ? "clamp(240px, 30vw, 400px)" : undefined,
+        justifyContent: isHero ? "center" : undefined,
         textDecoration: "none", color: DARK, transition: "all 0.3s",
       }}
     >
@@ -818,7 +821,7 @@ function StoreBadge({ href, label, icon, size = "hero" }: { href: string; label:
       <div>
         <div style={{
           fontFamily: MONO,
-          fontSize: isHero ? "clamp(10px, 1.2vw, 13px)" : "clamp(8px, 0.9vw, 10px)",
+          fontSize: isHero ? "clamp(9px, 1vw, 11px)" : "clamp(8px, 0.9vw, 10px)",
           textTransform: "uppercase" as const, letterSpacing: "0.06em",
           color: "rgba(32,32,32,0.5)", marginBottom: isHero ? 4 : 2,
         }}>
@@ -826,7 +829,7 @@ function StoreBadge({ href, label, icon, size = "hero" }: { href: string; label:
         </div>
         <div style={{
           fontFamily: DISPLAY, fontWeight: 600,
-          fontSize: isHero ? "clamp(1.6rem, 4vw, 2.8rem)" : "clamp(0.9rem, 1.5vw, 1.2rem)",
+          fontSize: isHero ? "clamp(1.3rem, 3vw, 2.2rem)" : "clamp(0.9rem, 1.5vw, 1.2rem)",
         }}>{label}</div>
       </div>
     </a>
@@ -874,7 +877,7 @@ function DownloadSection() {
       </FadeIn>
 
       <FadeIn delay={0.1}>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(1px, 0.3vw, 2px)", justifyContent: "center", marginBottom: "clamp(3rem, 6vw, 5rem)" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(16px, 3vw, 32px)", justifyContent: "center", marginBottom: "clamp(3rem, 6vw, 5rem)" }}>
           <StoreBadge href="https://apps.apple.com/app/biq-protocol/id6745685837" label="App Store" icon={<AppleIcon size={48} />} size="hero" />
           <StoreBadge href="https://play.google.com/store/apps/details?id=me.biq.app" label="Google Play" icon={<PlayIcon size={48} />} size="hero" />
         </div>
