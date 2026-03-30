@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Forget Me — biq</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Request deletion of your biq account and all associated data." />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: 'Grifter';
+      src: url('/fonts/GRIFTER-Regular.woff2') format('woff2'),
+           url('/fonts/GRIFTER-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Grifter';
+      src: url('/fonts/GRIFTER-Bold.woff2') format('woff2'),
+           url('/fonts/GRIFTER-Bold.woff') format('woff');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #202020;
+      color: #e5e5e5;
+      font-family: "DM Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: clamp(1.5rem, 3vw, 3rem);
+      background: none;
+      border: 1px solid #e5e5e5;
+      border-radius: 24px;
+      padding: 8px 18px;
+      cursor: pointer;
+      font-family: "DM Mono", "SF Mono", "Fira Code", "Consolas", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #e5e5e5;
+      text-decoration: none;
+      z-index: 60;
+      transition: all 0.3s;
+    }
+
+    .back-link:hover {
+      background: #e5e5e5;
+      color: #202020;
+    }
+
+    .container {
+      max-width: 600px;
+      padding: clamp(2rem, 5vw, 4rem);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 600;
+      color: #e5e5e5;
+      line-height: 1.1;
+      font-family: "Grifter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      letter-spacing: -0.02em;
+      margin-bottom: clamp(1.5rem, 4vw, 3rem);
+    }
+
+    .description {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      font-family: "DM Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      line-height: 1.8;
+      color: rgba(229,229,229,0.7);
+      margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+    }
+
+    .description a {
+      color: #e5e5e5;
+      text-decoration: underline;
+    }
+
+    .steps {
+      font-size: clamp(0.85rem, 1.5vw, 1rem);
+      font-family: "DM Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      line-height: 1.8;
+      color: rgba(229,229,229,0.5);
+      margin-bottom: clamp(1rem, 2vw, 2rem);
+    }
+
+    .warning {
+      font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+      font-family: "DM Mono", "SF Mono", "Fira Code", "Consolas", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(229,229,229,0.35);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <a href="https://www.biq.me" class="back-link">← biq.me</a>
+
+  <div class="container">
+    <h1>Forget Me</h1>
+    <p class="description">
+      If you wish to have your data removed, please contact us at
+      <a href="mailto:connect@biq.me">connect@biq.me</a>
+      from the email you used to register the account.
+    </p>
+    <p class="steps">
+      You will receive a confirmation email to verify your deletion request. After replying to the confirmation, all account data will be removed.
+    </p>
+    <p class="warning">
+      Please note that this action is irreversible and will delete all your data from our systems.
+    </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/forgetMe", "destination": "/forgetMe.html" }
+  ]
+}
